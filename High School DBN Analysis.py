@@ -25,37 +25,49 @@ filtered_df = filtered_df.drop(dropped_cols, axis=1)
 # Drop rows with any NaN values
 filtered_df = filtered_df.dropna()
 
-# Define the School DBN letters to filter
-school_dbn_letters = ['M', 'X', 'Q', 'K']
+# Filter rows where 'School DBN' contains 'M'
+contains_m_df = filtered_df[filtered_df['School DBN'].str.contains('M')]
 
-# Initialize empty lists for storing results
-result_data = []
+# Group by 'School DBN' and calculate the mean of 'Mean Score' for 'M'
+m_result = contains_m_df.groupby('School DBN')['Mean Score'].mean().reset_index()
 
-# Loop through each school DBN letter and calculate mean scores
-for letter in school_dbn_letters:
-    contains_letter_df = filtered_df[filtered_df['School DBN'].str.contains(letter)]
-    mean_scores = contains_letter_df.groupby('School DBN')['Mean Score'].mean().reset_index()
-    average_mean_score = mean_scores['Mean Score'].mean()
-    result_data.append({'School DBN': f'{letter} School DBNs', 'Average Mean Score': average_mean_score})
+# Filter rows where 'School DBN' contains 'X'
+contains_x_df = filtered_df[filtered_df['School DBN'].str.contains('X')]
 
-# Create DataFrame from result_data
-plot_df = pd.DataFrame(result_data)
+# Group by 'School DBN' and calculate the mean of 'Mean Score' for 'X'
+x_result = contains_x_df.groupby('School DBN')['Mean Score'].mean().reset_index()
 
-# Calculate the overall average mean score
-overall_average = plot_df['Average Mean Score'].mean()
+# Filter rows where 'School DBN' contains 'Q'
+contains_q_df = filtered_df[filtered_df['School DBN'].str.contains('Q')]
+
+# Group by 'School DBN' and calculate the mean of 'Mean Score' for 'Q'
+q_result = contains_q_df.groupby('School DBN')['Mean Score'].mean().reset_index()
+
+# Filter rows where 'School DBN' contains 'K'
+contains_k_df = filtered_df[filtered_df['School DBN'].str.contains('K')]
+
+# Group by 'School DBN' and calculate the mean of 'Mean Score' for 'K'
+k_result = contains_k_df.groupby('School DBN')['Mean Score'].mean().reset_index()
 
 # Plotting the results
-plt.figure(figsize=(12, 6))
+plt.figure(figsize=(16, 8))
 
-plt.bar(plot_df['School DBN'], plot_df['Average Mean Score'], color=['blue', 'orange', 'green', 'red'], alpha=0.7)
+# Plot for 'M' results
+plt.bar(m_result['School DBN'], m_result['Mean Score'], alpha=0.6, label='M School DBNs')
 
-# Plot the overall average as a horizontal line
-plt.axhline(y=overall_average, color='gray', linestyle='--', label=f'Overall Average: {overall_average:.2f}')
+# Plot for 'X' results
+plt.bar(x_result['School DBN'], x_result['Mean Score'], alpha=0.6, label='X School DBNs')
+
+# Plot for 'Q' results
+plt.bar(q_result['School DBN'], q_result['Mean Score'], alpha=0.6, label='Q School DBNs')
+
+# Plot for 'K' results
+plt.bar(k_result['School DBN'], k_result['Mean Score'], alpha=0.6, label='K School DBNs')
 
 plt.xlabel('School DBN')
-plt.ylabel('Average Mean Score')
-plt.title('Comparison of Average Mean Scores for School DBNs Containing "M", "X", "Q", and "K"')
-plt.xticks(rotation=0)  # Rotate x-axis labels if needed
+plt.ylabel('Mean Score')
+plt.title('Comparison of Mean Scores for School DBNs Containing "M", "X", "Q", and "K"')
+plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
 plt.legend()
 
 plt.tight_layout()
