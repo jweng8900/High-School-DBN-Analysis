@@ -72,3 +72,26 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
+
+average_m = m_result['Mean Score'].mean()
+average_x = x_result['Mean Score'].mean()
+average_q = q_result['Mean Score'].mean()
+average_k = k_result['Mean Score'].mean()
+
+# Prepare data for plotting
+data = {
+    'School DBN': ['M School DBNs', 'X School DBNs','Q School DBNs','K School DBNs'],
+    'Average Mean Score': [average_m, average_x,average_q, average_k]
+}
+plot_df = pd.DataFrame(data)
+
+# Plotting the results
+plt.figure(figsize=(10, 6))
+
+plt.bar(plot_df['School DBN'], plot_df['Average Mean Score'], color=['blue', 'orange','yellow','purple'], alpha=0.7)
+
+plt.xlabel('School DBN')
+plt.ylabel('Average Mean Score')
+plt.title('Comparison of Average Mean Scores for School DBNs Containing "M" and "X"')
+
+plt.show()
